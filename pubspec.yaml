@@ -41,6 +41,7 @@ dependencies:
   firebase_storage: ^10.2.17
   toggle_switch: ^2.0.1
   firebase_messaging: ^11.4.1
+  google_sign_in: ^5.3.3
 
 
 dev_dependencies:

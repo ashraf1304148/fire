@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MainController extends GetxController {
   //AuthController.intsance..
@@ -25,6 +26,7 @@ class MainController extends GetxController {
     ever(_user, _initialScreen);
   }
 
+// initial screen
   _initialScreen(User? user) {
     if (user == null) {
       print("no user");
@@ -35,6 +37,7 @@ class MainController extends GetxController {
     }
   }
 
+// firebase messageing background
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
     // If you're going to use other Firebase services in the background, such as Firestore,
@@ -44,6 +47,7 @@ class MainController extends GetxController {
     print("Handling a background message: ${message.messageId}");
   }
 
+// initial image
   initialMessage() async {
     NotificationSettings settings = await fcmToken.requestPermission(
       alert: true,
@@ -66,6 +70,7 @@ class MainController extends GetxController {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
+  // register
   void register(UserModel data) async {
     try {
       await auth.createUserWithEmailAndPassword(
@@ -85,6 +90,7 @@ class MainController extends GetxController {
     }
   }
 
+// login
   void login(String email, password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -101,6 +107,7 @@ class MainController extends GetxController {
     }
   }
 
+// set data
   void setData(
       {required String tableName,
       required Map<String, dynamic> data,
@@ -125,6 +132,7 @@ class MainController extends GetxController {
     }
   }
 
+// get users
   void getUsers() async {
     try {
       var result = await FirebaseFirestore.instance
@@ -151,6 +159,7 @@ class MainController extends GetxController {
     update();
   }
 
+// delete user
   Future deleteUser(String email, String password) async {
     try {
       await auth.currentUser!.delete();
@@ -167,6 +176,7 @@ class MainController extends GetxController {
     }
   }
 
+// delete element
   void deleteElement({required String tableName, required String id}) async {
     try {
       // var result = await FirebaseStorage.instance.ref("/files").listAll();
@@ -189,8 +199,29 @@ class MainController extends GetxController {
     update();
   }
 
+// log out
   void logOut() async {
     await auth.signOut();
     Get.toNamed(RouteHelper.getSignInPage());
+  }
+
+// social methods
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser =
+        await GoogleSignIn(scopes: ['email']).signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

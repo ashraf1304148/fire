@@ -1,3 +1,4 @@
+import 'package:fire/controller/main_controller.dart';
 import 'package:fire/pages/log_in_page.dart';
 import 'package:fire/pages/show_data.dart';
 import 'package:fire/routes/route_helper.dart';
@@ -127,21 +128,36 @@ class _HomePage extends State<HomePage> {
                       SizedBox(height: Dimensions.height20 * 2),
                       Center(
                         child: Wrap(
-                          runAlignment: WrapAlignment.end,
-                          crossAxisAlignment: WrapCrossAlignment.end,
+                            runAlignment: WrapAlignment.end,
+                            crossAxisAlignment: WrapCrossAlignment.end,
 
-                          // alignment: WrapAlignment.end,
-                          spacing: Dimensions.width10,
-                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: List<Widget>.generate(signupIcons.length,
-                              (index) {
-                            return CircleAvatar(
-                              radius: Dimensions.height10 * 2,
-                              backgroundImage: AssetImage(
-                                  "assets/images/" + signupIcons[index]),
-                            );
-                          }),
-                        ),
+                            // alignment: WrapAlignment.end,
+                            spacing: Dimensions.width10,
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              // google method
+                              GestureDetector(
+                                onTap: (() =>
+                                    MainController.instance.signInWithGoogle()),
+                                child: CircleAvatar(
+                                  radius: Dimensions.height10 * 2,
+                                  backgroundImage: AssetImage(
+                                      "assets/images/" + signupIcons[0]),
+                                ),
+                              ),
+                              // google method
+
+                              CircleAvatar(
+                                radius: Dimensions.height10 * 2,
+                                backgroundImage: AssetImage(
+                                    "assets/images/" + signupIcons[1]),
+                              ),
+                              CircleAvatar(
+                                radius: Dimensions.height10 * 2,
+                                backgroundImage: AssetImage(
+                                    "assets/images/" + signupIcons[2]),
+                              ),
+                            ]),
                       ),
                       SizedBox(
                         height: Dimensions.height20 * 3,
